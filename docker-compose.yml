@@ -1,0 +1,35 @@
+version: '3'
+services:
+
+  # Servicio de la aplicación Laravel
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - db
+    ports:
+      - "8000:80"
+    networks:
+      - laravel
+
+  # Servicio de MySQL
+  db:
+    image: mysql:5.7
+    volumes:
+      - dbdata:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: homestead
+      MYSQL_USER: homestead
+      MYSQL_PASSWORD: secret
+    networks:
+      - laravel
+
+networks:
+  laravel:
+
+volumes:
+  dbdata:

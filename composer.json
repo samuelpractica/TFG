@@ -1,0 +1,7 @@
+{
+  "name": "tfg/asir",
+  "require": {
+    "php": "7.4.33",
+    "laravel/framework": "^8.0"
+  }
+}
