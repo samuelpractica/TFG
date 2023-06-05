@@ -7,61 +7,95 @@ use Illuminate\Http\Request;
 
 class PointOfSaleController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
-        $pointOfSales = PointOfSale::all();
-        return view('point_of_sales.index', compact('pointOfSales'));
+        $pointsOfSale = PointOfSale::all();
+
+        return view('pointsOfSale.index', compact('pointsOfSale'));
     }
 
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function create()
     {
-        return view('point_of_sales.create');
+        return view('pointsOfSale.create');
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required',
-            'location' => 'required',
-            'manager' => 'required',
-        ]);
+        $pointOfSale = new PointOfSale;
 
-        PointOfSale::create($request->all());
+        $pointOfSale->location = $request->location;
+        $pointOfSale->manager_id = $request->manager_id;
 
-        return redirect()->route('point_of_sales.index')->with('success', 'Point of sale created successfully.');
+        $pointOfSale->save();
+
+        return redirect()->route('pointsOfSale.index');
     }
 
-    public function show($id)
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\PointOfSale  $pointOfSale
+     * @return \Illuminate\Http\Response
+     */
+    public function show(PointOfSale $pointOfSale)
     {
-        $pointOfSale = PointOfSale::findOrFail($id);
-        return view('point_of_sales.show', compact('pointOfSale'));
+        return view('pointsOfSale.show', compact('pointOfSale'));
     }
 
-    public function edit($id)
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Models\PointOfSale  $pointOfSale
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(PointOfSale $pointOfSale)
     {
-        $pointOfSale = PointOfSale::findOrFail($id);
-        return view('point_of_sales.edit', compact('pointOfSale'));
+        return view('pointsOfSale.edit', compact('pointOfSale'));
     }
 
-    public function update(Request $request, $id)
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\PointOfSale  $pointOfSale
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, PointOfSale $pointOfSale)
     {
-        $request->validate([
-            'name' => 'required',
-            'location' => 'required',
-            'manager' => 'required',
-        ]);
+        $pointOfSale->location = $request->location;
+        $pointOfSale->manager_id = $request->manager_id;
 
-        $pointOfSale = PointOfSale::findOrFail($id);
-        $pointOfSale->update($request->all());
+        $pointOfSale->save();
 
-        return redirect()->route('point_of_sales.index')->with('success', 'Point of sale updated successfully.');
+        return redirect()->route('pointsOfSale.index');
     }
 
-    public function destroy($id)
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\PointOfSale  $pointOfSale
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(PointOfSale $pointOfSale)
     {
-        $pointOfSale = PointOfSale::findOrFail($id);
         $pointOfSale->delete();
 
-        return redirect()->route('point_of_sales.index')->with('success', 'Point of sale deleted successfully.');
+        return redirect()->route('pointsOfSale.index');
     }
 }

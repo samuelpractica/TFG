@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Resource;
 use Illuminate\Http\Request;
 
 class ResourceController extends Controller
@@ -13,7 +14,9 @@ class ResourceController extends Controller
      */
     public function index()
     {
-        //
+        $resources = Resource::all();
+
+        return view('resources.index', compact('resources'));
     }
 
     /**
@@ -23,7 +26,7 @@ class ResourceController extends Controller
      */
     public function create()
     {
-        //
+        return view('resources.create');
     }
 
     /**
@@ -34,51 +37,67 @@ class ResourceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $resource = new Resource;
+
+        $resource->name = $request->name;
+        $resource->type = $request->type;
+        $resource->quantity = $request->quantity;
+
+        $resource->save();
+
+        return redirect()->route('resources.index');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Resource  $resource
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Resource $resource)
     {
-        //
+        return view('resources.show', compact('resource'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Resource  $resource
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Resource $resource)
     {
-        //
+        return view('resources.edit', compact('resource'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Resource  $resource
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Resource $resource)
     {
-        //
+        $resource->name = $request->name;
+        $resource->type = $request->type;
+        $resource->quantity = $request->quantity;
+
+        $resource->save();
+
+        return redirect()->route('resources.index');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Resource  $resource
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Resource $resource)
     {
-        //
+        $resource->delete();
+
+        return redirect()->route('resources.index');
     }
 }

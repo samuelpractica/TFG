@@ -5,19 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class PointOfSale extends Model
+class Invoice extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'name',
-        'location',
-        'manager_id',
+        'order_id',
+        'amount',
+        'tax',
+        'total_amount',
     ];
 
-    public function manager()
+    public function order()
     {
-        return $this->belongsTo(Employee::class, 'manager_id');
+        return $this->belongsTo(Order::class);
     }
 
 }

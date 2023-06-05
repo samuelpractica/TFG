@@ -7,59 +7,99 @@ use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
         $orders = Order::all();
+
         return view('orders.index', compact('orders'));
     }
 
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function create()
     {
         return view('orders.create');
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function store(Request $request)
     {
-        $request->validate([
-            'customer_name' => 'required',
-            'total_amount' => 'required|numeric',
-        ]);
+        $order = new Order;
 
-        Order::create($request->all());
+        $order->customer_id = $request->customer_id;
+        $order->table_id = $request->table_id;
+        $order->total_amount = $request->total_amount;
+        $order->status = $request->status;
 
-        return redirect()->route('orders.index')->with('success', 'Order created successfully.');
+        $order->save();
+
+        return redirect()->route('orders.index');
     }
 
-    public function show($id)
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Order  $order
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Order $order)
     {
-        $order = Order::findOrFail($id);
         return view('orders.show', compact('order'));
     }
 
-    public function edit($id)
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Models\Order  $order
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Order $order)
     {
-        $order = Order::findOrFail($id);
         return view('orders.edit', compact('order'));
     }
 
-    public function update(Request $request, $id)
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Order  $order
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, Order $order)
     {
-        $request->validate([
-            'customer_name' => 'required',
-            'total_amount' => 'required|numeric',
-        ]);
+        $order->customer_id = $request->customer_id;
+        $order->table_id = $request->table_id;
+        $order->total_amount = $request->total_amount;
+        $order->status = $request->status;
 
-        $order = Order::findOrFail($id);
-        $order->update($request->all());
+        $order->save();
 
-        return redirect()->route('orders.index')->with('success', 'Order updated successfully.');
+        return redirect()->route('orders.index');
     }
 
-    public function destroy($id)
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Order  $order
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Order $order)
     {
-        $order = Order::findOrFail($id);
         $order->delete();
 
-        return redirect()->route('orders.index')->with('success', 'Order deleted successfully.');
+        return redirect()->route('orders.index');
     }
 }

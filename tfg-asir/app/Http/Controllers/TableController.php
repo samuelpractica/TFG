@@ -2,64 +2,100 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Order;
+use App\Models\Table;
 use Illuminate\Http\Request;
 
-class OrderController extends Controller
+class TableController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
-        $orders = Order::all();
-        return view('orders.index', compact('orders'));
+        $tables = Table::all();
+
+        return view('tables.index', compact('tables'));
     }
 
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function create()
     {
-        return view('orders.create');
+        return view('tables.create');
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function store(Request $request)
     {
-        $request->validate([
-            'customer_name' => 'required',
-            'total_amount' => 'required|numeric',
-        ]);
+        $table = new Table;
 
-        Order::create($request->all());
+        $table->name = $request->name;
+        $table->capacity = $request->capacity;
 
-        return redirect()->route('orders.index')->with('success', 'Order created successfully.');
+        $table->save();
+
+        return redirect()->route('tables.index');
     }
 
-    public function show($id)
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Table  $table
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Table $table)
     {
-        $order = Order::findOrFail($id);
-        return view('orders.show', compact('order'));
+        return view('tables.show', compact('table'));
     }
 
-    public function edit($id)
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Models\Table  $table
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Table $table)
     {
-        $order = Order::findOrFail($id);
-        return view('orders.edit', compact('order'));
+        return view('tables.edit', compact('table'));
     }
 
-    public function update(Request $request, $id)
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Table  $table
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, Table $table)
     {
-        $request->validate([
-            'customer_name' => 'required',
-            'total_amount' => 'required|numeric',
-        ]);
+        $table->name = $request->name;
+        $table->capacity = $request->capacity;
 
-        $order = Order::findOrFail($id);
-        $order->update($request->all());
+        $table->save();
 
-        return redirect()->route('orders.index')->with('success', 'Order updated successfully.');
+        return redirect()->route('tables.index');
     }
 
-    public function destroy($id)
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Table  $table
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Table $table)
     {
-        $order = Order::findOrFail($id);
-        $order->delete();
+        $table->delete();
 
-        return redirect()->route('orders.index')->with('success', 'Order deleted successfully.');
+        return redirect()->route('tables.index');
     }
 }

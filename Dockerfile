@@ -20,10 +20,16 @@ WORKDIR /var/www/html
 COPY . .
 
 # Instala las dependencias de tu proyecto usando Composer
-RUN composer install --optimize-autoloader --no-dev
+RUN composer install --optimize-autoloader --no-dev && \
+    composer require doctrine/dbal && \
+    # Genera una llave para Laravel
+    php artisan key:generate
+
 
 # Expone el puerto 80 para el servidor Nginx
-EXPOSE 80
+EXPOSE 8000
 
 # Inicia los servicios de Nginx y PHP-FPM
-CMD php-fpm && nginx -g "daemon off;"
+# CMD php-fpm && nginx -g "daemon off;"
+WORKDIR /var/www/html/tfg-asir
+CMD php artisan serve --host=0.0.0.0
