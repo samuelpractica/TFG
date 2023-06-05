@@ -32,4 +32,4 @@ EXPOSE 8000
 
 # Inicia los servicios de Nginx y PHP-FPM
 # CMD php-fpm && nginx -g "daemon off;"
-CMD php artisan serve --host=0.0.0.0
+CMD composer install --optimize-autoloader --no-dev && composer require doctrine/dbal && php artisan serve --host=0.0.0.0
