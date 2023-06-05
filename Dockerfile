@@ -18,6 +18,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 # Configura el directorio de trabajo y copia los archivos de tu proyecto
 WORKDIR /var/www/html
 COPY . .
+WORKDIR /var/www/html/tfg-asir
 
 # Instala las dependencias de tu proyecto usando Composer
 RUN composer install --optimize-autoloader --no-dev && \
@@ -31,5 +32,4 @@ EXPOSE 8000
 
 # Inicia los servicios de Nginx y PHP-FPM
 # CMD php-fpm && nginx -g "daemon off;"
-WORKDIR /var/www/html/tfg-asir
 CMD php artisan serve --host=0.0.0.0
